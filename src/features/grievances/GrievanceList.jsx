@@ -1,93 +1,55 @@
 import React from 'react';
 import { useGetAllGrievancesQuery } from '../../api/grievancesApi';
 import { Link } from 'react-router-dom';
+import GrievanceCard from '../../components/grievances/GrievanceCard';
 
 const GrievanceList = () => {
   const { data: grievances, isLoading, error } = useGetAllGrievancesQuery();
 
   if (isLoading)
-    return <div className="text-center py-8 text-pink-600 animate-pulse">Hold on bae... fetching your grievances 💌</div>;
+    return <div className="text-center py-8 text-pink-600 animate-pulse text-sm sm:text-base">Hold on bae... fetching your grievances 💌</div>;
 
   if (error) {
     console.error("Error fetching grievances:", error);
     return (
-      <div className="text-center py-8 text-red-500">
+      <div className="text-center py-8 text-red-500 text-sm sm:text-base">
         Oops 😣 something went wrong... {error.message || "please try again later 🥺"}
       </div>
     );
   }
 
+  // Sort grievances by createdAt (most recent first)
+  const sortedGrievances = [...(grievances || [])].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
+
   return (
-    <div className="container mx-auto px-4 py-10">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-extrabold text-pink-700">
-          My Little Grievances 💭
+    <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-10">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold sm:font-extrabold text-pink-700">
+          {window.innerWidth < 640 ? 'My Grievances 💭' : 'My Little Grievances 💭'}
         </h1>
         <Link 
           to="/grievances/new"
-          className="bg-pink-500 text-white px-5 py-2 rounded-full hover:bg-pink-600 transition-all shadow-md"
+          className="bg-pink-500 text-white px-4 py-1.5 sm:px-5 sm:py-2 rounded-full hover:bg-pink-600 transition-all shadow-md text-sm sm:text-base whitespace-nowrap"
         >
-          + Tell Bae 💌
+          {window.innerWidth < 640 ? '+ New 💌' : '+ Tell Bae 💌'}
         </Link>
       </div>
 
-      <div className="space-y-6">
-        {grievances?.length > 0 ? (
-          grievances.map((grievance) => (
-            <div
+      <div className="space-y-4 sm:space-y-6">
+        {sortedGrievances.length > 0 ? (
+          sortedGrievances.map((grievance) => (
+            <GrievanceCard
               key={grievance.id}
-              className="border border-pink-200 rounded-2xl p-5 bg-white shadow hover:shadow-lg transition-shadow"
-            >
-              <div className="flex justify-between items-start">
-                <div>
-                  <h2 className="text-xl font-semibold text-purple-800">
-                    <Link
-                      to={`/grievances/${grievance.id}`}
-                      className="hover:underline hover:text-pink-600"
-                    >
-                      {grievance.title}
-                    </Link>
-                  </h2>
-                  <p className="text-gray-600 mt-1 italic">
-                    "{grievance.description.substring(0, 80)}..."
-                  </p>
-                </div>
-                <span
-                  className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    grievance.status === 'PENDING'
-                      ? 'bg-yellow-100 text-yellow-700'
-                      : grievance.status === 'IN_PROGRESS'
-                      ? 'bg-purple-100 text-purple-700'
-                      : grievance.status === 'RESOLVED'
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-red-100 text-red-700'
-                  }`}
-                >
-                  {grievance.status === 'PENDING'
-                    ? 'Waiting... ⏳'
-                    : grievance.status === 'IN_PROGRESS'
-                    ? 'Working on it... 💼'
-                    : grievance.status === 'RESOLVED'
-                    ? 'All Good Now 💖'
-                    : 'Unknown 😶'}
-                </span>
-              </div>
-
-              <div className="mt-4 flex justify-between items-center text-sm text-gray-500">
-                <span>
-                  📅 Created: {new Date(grievance.createdAt).toLocaleDateString()}
-                </span>
-                <Link
-                  to={`/grievances/${grievance.id}`}
-                  className="text-pink-500 hover:text-pink-700 font-medium"
-                >
-                  Peek Details ➜
-                </Link>
-              </div>
-            </div>
+              grievance={grievance}
+              compact={window.innerWidth < 640}
+              className="hover:shadow-md sm:hover:shadow-lg transition-shadow cursor-pointer"
+              onClick={() => window.location.href = `/grievances/${grievance.id}`}
+            />
           ))
         ) : (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-gray-500 text-sm sm:text-base">
             No grievances found... are we actually okay now? 🥹💗
           </div>
         )}

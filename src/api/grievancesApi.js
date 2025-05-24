@@ -3,6 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const grievanceApi = createApi({
   reducerPath: 'grievanceApi',
   baseQuery: fetchBaseQuery({
+    //  baseUrl: 'http://localhost:8080/grievances',
     baseUrl: 'https://mindful-radiance-production.up.railway.app/grievances',
   }),
   tagTypes: ['Grievances'],

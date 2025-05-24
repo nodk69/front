@@ -63,59 +63,67 @@ const ResolutionSteps = ({ grievance, onStepAdded }) => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {showConfetti && (
         <Confetti 
           recycle={false}
           numberOfPieces={200}
           colors={['#ff7eb9', '#ff65a3', '#7afcff', '#feff9c', '#fff740']}
+          width={window.innerWidth}
+          height={window.innerHeight}
         />
       )}
 
       {error && (
-        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg">
+        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 md:p-4 rounded-lg text-sm md:text-base">
           <p>{error}</p>
         </div>
       )}
 
-      <div className="space-y-4">
+      <div className="space-y-3 md:space-y-4">
         <AnimatePresence>
           {grievance?.completedSteps?.map((step, index) => (
             <motion.div 
               key={`completed-${index}`}
-              className="flex items-start bg-pink-50 rounded-lg p-4 border border-pink-200"
+              className="flex items-start bg-pink-50 rounded-lg p-3 md:p-4 border border-pink-200"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
             >
-              <div className="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-pink-500 mr-3">
-                <FaCheck className="h-3 w-3 text-white" />
+              <div className="flex-shrink-0 h-5 w-5 md:h-6 md:w-6 flex items-center justify-center rounded-full bg-pink-500 mr-2 md:mr-3">
+                <FaCheck className="h-2.5 w-2.5 md:h-3 md:w-3 text-white" />
               </div>
-              <span className="text-sm text-pink-700 line-through">{step}</span>
+              <span className="text-xs md:text-sm text-pink-700 line-through">{step}</span>
             </motion.div>
           ))}
 
           {grievance?.resolutionSteps?.map((step, index) => (
             <motion.div 
               key={`pending-${index}`}
-              className="flex items-start bg-white rounded-lg p-4 border border-pink-200"
+              className="flex items-start bg-white rounded-lg p-3 md:p-4 border border-pink-200"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
             >
-              <div className="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-pink-100 border border-pink-200 mr-3">
-                <FaClock className="h-3 w-3 text-pink-500" />
+              <div className="flex-shrink-0 h-5 w-5 md:h-6 md:w-6 flex items-center justify-center rounded-full bg-pink-100 border border-pink-200 mr-2 md:mr-3">
+                <FaClock className="h-2.5 w-2.5 md:h-3 md:w-3 text-pink-500" />
               </div>
-              <div className="flex-1">
-                <span className="text-sm text-pink-800">{step}</span>
-                <div className="flex justify-end space-x-2 mt-2">
+              <div className="flex-1 min-w-0">
+                <span className="text-xs md:text-sm text-pink-800 break-words">{step}</span>
+                <div className="flex flex-col xs:flex-row justify-end gap-2 mt-2">
                   <Button
                     variant="ghost"
-                    size="small"
+                    size="xsmall"
                     onClick={() => handleRemoveStep(step)}
-                    className="text-xs"
+                    className="text-xs py-1"
                   >
                     Remove
                   </Button>
                   <Button
                     variant="primary"
-                    size="small"
+                    size="xsmall"
                     onClick={() => handleCompleteStep(step)}
-                    className="text-xs"
+                    className="text-xs py-1 cursor-pointer"
                   >
                     Complete
                   </Button>
@@ -125,7 +133,12 @@ const ResolutionSteps = ({ grievance, onStepAdded }) => {
           ))}
 
           {isAddingStep && (
-            <motion.div className="bg-pink-50 rounded-lg p-4 border-2 border-dashed border-pink-300">
+            <motion.div 
+              className="bg-pink-50 rounded-lg p-3 md:p-4 border-2 border-dashed border-pink-300"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
               <input
                 type="text"
                 value={newStep}
@@ -133,22 +146,24 @@ const ResolutionSteps = ({ grievance, onStepAdded }) => {
                   setNewStep(e.target.value);
                   setError(null);
                 }}
-                className="w-full border border-pink-200 rounded-lg px-3 py-2 mb-3"
+                className="w-full border border-pink-200 rounded-lg px-2 py-1.5 md:px-3 md:py-2 mb-2 md:mb-3 text-xs md:text-sm"
                 placeholder="What loving action should we take next?"
                 autoFocus
               />
-              <div className="flex justify-end space-x-3">
+              <div className="flex justify-end gap-2 md:gap-3">
                 <Button
                   variant="ghost"
-                  size="small"
+                  size="xsmall"
                   onClick={() => setIsAddingStep(false)}
+                  className="text-xs"
                 >
                   Cancel
                 </Button>
                 <Button
                   variant="primary"
-                  size="small"
+                  size="xsmall"
                   onClick={handleAddNewStep}
+                  className="text-xs"
                 >
                   Add
                 </Button>
@@ -160,9 +175,10 @@ const ResolutionSteps = ({ grievance, onStepAdded }) => {
         {!isAddingStep && (
           <Button
             onClick={() => setIsAddingStep(true)}
-            className="mx-auto"
+            className="mx-auto cursor-pointer"
+            size="small"
           >
-            <FaPlus className="mr-2" />
+            <FaPlus className="mr-1 md:mr-2 h-3 w-3 md:h-4 md:w-4" />
             Add New Step
           </Button>
         )}
