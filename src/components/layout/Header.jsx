@@ -18,7 +18,7 @@ const Header = () => {
               Love Complaint Diary
             </h1>
             <h1 className="text-xl font-bold text-pink-700 tracking-wide sm:hidden">
-              LCD
+              Coconut dairy
             </h1>
           </Link>
 
