@@ -99,9 +99,25 @@ const GrievanceDetailPage = () => {
             </div>
           </div>
           
-          <p className="mt-6 text-pink-600 whitespace-pre-line leading-relaxed">
-            {grievance.content}
-          </p>
+          {/* Description Section */}
+          <div className="mt-6 bg-pink-50 rounded-xl p-5 border border-pink-200">
+            <div className="flex items-center text-pink-600 mb-2">
+              <HeartIcon className="h-5 w-5 mr-2" />
+              <h2 className="font-semibold">Your Heartfelt Message</h2>
+            </div>
+            <p className="text-pink-700 whitespace-pre-line leading-relaxed">
+              {grievance.description}
+            </p>
+          </div>
+          
+          {/* Additional Content */}
+          {grievance.content && (
+            <div className="mt-6">
+              <p className="text-pink-600 whitespace-pre-line leading-relaxed">
+                {grievance.content}
+              </p>
+            </div>
+          )}
           
           <div className="absolute -bottom-3 -right-3 rotate-12">
             <GiHearts className="h-8 w-8 text-pink-300" />
